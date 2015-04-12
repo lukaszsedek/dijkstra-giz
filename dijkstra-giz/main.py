@@ -25,8 +25,8 @@ def parse_first_line_config( line ):
   try:
     vertex_number = int(line[0])
     logging.info("Vertex number: %s", vertex_number)
-    for i in range(0, vertex_number):
-    	print "fff"
+    for i in range(1, vertex_number+1):
+    	g.add_vertex(i)
     edges_number  = int(line[1])
     logging.info("Edge number: %s", edges_number)
   except ValueError:
@@ -81,7 +81,6 @@ if __name__ == "__main__":
   # create graph with vertex_number vertex
   # Rationale: do not process variables while read file.
   g = Graph()
-  print g
   
   # load config-topology from filename with readonly permissions
   f = open(filename, 'r')
@@ -101,9 +100,13 @@ if __name__ == "__main__":
       else:
         logging.debug("config file 1st line has to much numbers")
         parse_first_line_config(splitted_line)
+    # parsing rest of the config-topology file
     else:
       parse_edges(line)
     line_numer = line_numer+1
   logging.debug("closing file...")
   f.close()
+
+  logging.info("Vertices %s" , g.get_vertices())
+  
 
