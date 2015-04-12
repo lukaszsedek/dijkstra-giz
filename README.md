@@ -11,18 +11,18 @@ z wyspy o numerze 1 do wyspy o numerze n. Bajtek cierpi
 na chorobę morską, dlatego chce zminimalizować długość podróży.
 Pomóż mu w tym problemie.
 
-### Wejście:
+* Wejście:
 W pierszej linii znajdują się 2 liczby: n i m, gdzie n jest liczbą wysp,
 a m liczbą połączeń pomiędzy wyspami. m następnych wierszy zawiera
 3 liczby: a, b i d, które oznaczają, że prom pływa od a do b
 trasą o długości d.
 
-### Wyjście:
+* Wyjście:
 W pierszej linii ma się znaleźć liczba oznaczająca łączną długość
 podróży. W następnej linii mają znaleźć się kolejne wyspy odwiedzane
 przez Bajtka (wraz z początkową i końcową)
 
-###Przykład wejścia:
+* Przykład wejścia:
 ```
 4 5
 1 2 4
@@ -32,13 +32,13 @@ przez Bajtka (wraz z początkową i końcową)
 3 4 1
 ```
 
-Przykład wyjścia:
+* Przykład wyjścia:
 ```
 5
 1 3 4
 ```
 
-### Inne wymagania:
+* Inne wymagania:
 Program ma czytać ze standardowego wejścia i wypisywać rozwiązanie
 na standardowe wyjście; n < 100000, m < 200000.
 
