@@ -26,7 +26,7 @@ def parse_first_line_config( line ):
     vertex_number = int(line[0])
     logging.info("Vertex number: %s", vertex_number)
     for i in range(1, vertex_number+1):
-    	g.add_vertex(i)
+      g.add_vertex(i)
     edges_number  = int(line[1])
     logging.info("Edge number: %s", edges_number)
   except ValueError:
@@ -46,6 +46,8 @@ def parse_edges(line):
     vertex_1 = int(line_splited[0])
     vertex_2 = int(line_splited[1])
     weight   = int(line_splited[2])
+    logging.debug("Adding edge(%s, %s, %s)", vertex_1, vertex_2, weight)
+    g.add_edge(vertex_1, vertex_2, weight)
   except ValueError:
   	logging.error("CASE ERROR: COULD NOT PARSE LINE AS A NUMBER!!\n %s"
     	, line)
@@ -108,5 +110,7 @@ if __name__ == "__main__":
   f.close()
 
   logging.info("Vertices %s" , g.get_vertices())
-  
+  g.print_graphviz()
+  g.print_graph()
+
 

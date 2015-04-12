@@ -52,7 +52,7 @@ $ source env/bin/activate
 $ pip install graphviz
 ```
 
-# Instrukcja użytkownika:
+## Instrukcja użytkownika:
 
 ```
 $ Usage: main.py [options]
