@@ -64,6 +64,23 @@ Options:
                         set logging level LOG, DEBUG
 $ python dijkstra-giz/main.py -f tests/test.txt
 ```
+```
+
+.
+├── LICENSE
+├── README.md
+├── bin
+├── dijkstra-giz
+│   ├── __init__.py
+│   ├── graph.py
+│   ├── graph.pyc
+│   ├── main.py
+│   ├── vertex.py
+│   └── vertex.pyc
+├── docs
+├-─ setup.py
+└── tests
+    └── test.txt
 
 # License:
 jakas
