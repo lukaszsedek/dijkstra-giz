@@ -10,23 +10,22 @@ from optparse import OptionParser
 import logging, sys, heapq
 from vertex import Vertex
 from graph import Graph
+from datetime import datetime
 
 # global variables 
-verbose          = True
 filename         = ""
-vertex_number    = 0
 edges_number     = 0
 
+# Dijkstra algorithm computing shortest path from start to target
 def dijkstra(aGraph, start, target): 
-  print '''Dijkstra's shortest path''' 
   # Set the distance for the start node to zero 
   start.set_distance(0) # Put tuple pair into the priority queue 
-  unvisited_queue = [(v.get_distance(),v) for v in aGraph] 
-  heapq.heapify(unvisited_queue) 
+  priority_queue = [(v.get_distance(),v) for v in aGraph] 
+  heapq.heapify(priority_queue) 
 
-  while len(unvisited_queue): 
+  while len(priority_queue): 
     # Pops a vertex with the smallest distance 
-    uv = heapq.heappop(unvisited_queue)
+    uv = heapq.heappop(priority_queue)
     current = uv[1] 
     current.set_visited() 
  
@@ -46,16 +45,17 @@ def dijkstra(aGraph, start, target):
         logging.debug("not updated current: %s, next: %s new_dist = %s ",
          current.get_id(), next.get_id(), next.get_distance())
 
-    while len(unvisited_queue):
-    	heapq.heappop(unvisited_queue)
-    unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
-    heapq.heapify(unvisited_queue)
+    while len(priority_queue):
+    	heapq.heappop(priority_queue)
+    priority_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
+    heapq.heapify(priority_queue)
 
-def shortest(v, path):
-  ''' make shortest path from v.previous'''
-  if v.previous:
-    path.append(v.previous.get_id())
-    shortest(v.previous, path)
+# build array of vertices based on v.previous from target
+def shortest(target, path):
+  # recurrence
+  if target.previous:
+    path.append(target.previous.get_id())
+    shortest(target.previous, path)
   return
 
 # Parsing 1st line of config-topologu file
@@ -99,16 +99,14 @@ if __name__ == "__main__":
   parser = OptionParser()
   parser.add_option("-f", "--file", dest="filename",
     help="load initial topology from FILE", metavar="FILE")
-  parser.add_option("-l", "--log", dest="loglevel", default="INFO",
-    help="set logging level LOG, DEBUG", metavar="LEVEL")
+  parser.add_option("-v","--verbose",  action="store_true", dest="verbose",
+  	help="Turn on talkative mode")
+  
   (options, args) = parser.parse_args()
   
   # logging utils section
-  permitted_log_levels = {"INFO", "DEBUG"}
-  if any(options.loglevel.upper() in item for item in permitted_log_levels):
-    logging.basicConfig(level=options.loglevel.upper())
-  else:
-    logging.basicConfig(level="INFO")
+  if options.verbose:
+    logging.basicConfig(level="DEBUG", format='%(message)s')
 
   # filename loading section
   logging.debug("checking filename argument")
@@ -131,10 +129,8 @@ if __name__ == "__main__":
     logging.debug("Line %s : %s", line_numer, line.rstrip('\n'))
     # first line parsing 
     if line_numer == 0:
-      logging.debug("First line")
       splitted_line = line.split()
       if len(splitted_line) == 2 :
-        logging.debug("config has exact 1st line format")
         parse_first_line_config(splitted_line)
       elif len(splitted_line) < 2 :
         logging.error("MISSING ARGUMENT IN 1ST LINE")
@@ -148,15 +144,22 @@ if __name__ == "__main__":
     line_numer = line_numer+1
   logging.debug("closing file...")
   f.close()
-
-  logging.info("Vertices %s" , g.get_vertices())
-  g.print_graphviz()
-  g.print_graph()
-
-  dijkstra(g, g.get_vertex(1), g.get_vertex(4))
-
-  target = g.get_vertex(4)
+  
+  # printing how many vertices are loaded
+  logging.info("Vertices %s" , g.get_vertices()) 
+  target = g.get_vertex(g.get_vertex_number()) # end of the graph
+  # Calculating shortest path from 1 to the last vertex
+  start_time = datetime.now()
+  # Dijkstra algorithm
+  dijkstra(g, g.get_vertex(1), target)
+  stop_time = datetime.now()
+  delta = stop_time - start_time
+  logging.debug("Execute time: %s seconds %s microseconds"
+  	, delta.seconds, delta.microseconds)
   path = [target.get_id()]
-  shortest(target, path)
-  print 'The shortest path : %s' %(path[::-1]) 
-
+  shortest(target, path) # sorting 
+  g.print_graph(path) # making graph.png file
+  print target.get_distance() # OUTPUT
+  path = path[::-1] # reverse it
+  path_str = ''.join(str(e) + " " for e in path) # making output
+  print path_str # OUTPUT
