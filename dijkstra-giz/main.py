@@ -7,16 +7,56 @@ lukasz.sedek(at)pja.edu.pl
 License Apache 2.0
 """
 from optparse import OptionParser
-import logging, sys
+import logging, sys, heapq
 from vertex import Vertex
 from graph import Graph
-
 
 # global variables 
 verbose          = True
 filename         = ""
 vertex_number    = 0
 edges_number     = 0
+
+def dijkstra(aGraph, start, target): 
+  print '''Dijkstra's shortest path''' 
+  # Set the distance for the start node to zero 
+  start.set_distance(0) # Put tuple pair into the priority queue 
+  unvisited_queue = [(v.get_distance(),v) for v in aGraph] 
+  heapq.heapify(unvisited_queue) 
+
+  while len(unvisited_queue): 
+    # Pops a vertex with the smallest distance 
+    uv = heapq.heappop(unvisited_queue)
+    current = uv[1] 
+    current.set_visited() 
+ 
+    #for next in v.adjacent: 
+    for next in current.adjacent:
+      # if visited, skip 
+      if next.visited: 
+   	    continue
+      new_dist = current.get_distance() + current.get_weight(next)
+
+      if new_dist < next.get_distance():
+      	next.set_distance(new_dist)
+      	next.set_previous(current)
+      	logging.debug("updated current: %s, next = %s, new_dist = %s",
+      		current.get_id(), next.get_id(), next.get_distance())
+      else:
+        logging.debug("not updated current: %s, next: %s new_dist = %s ",
+         current.get_id(), next.get_id(), next.get_distance())
+
+    while len(unvisited_queue):
+    	heapq.heappop(unvisited_queue)
+    unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
+    heapq.heapify(unvisited_queue)
+
+def shortest(v, path):
+  ''' make shortest path from v.previous'''
+  if v.previous:
+    path.append(v.previous.get_id())
+    shortest(v.previous, path)
+  return
 
 # Parsing 1st line of config-topologu file
 # initialize both variables. In case of cast Error, exit
@@ -113,4 +153,10 @@ if __name__ == "__main__":
   g.print_graphviz()
   g.print_graph()
 
+  dijkstra(g, g.get_vertex(1), g.get_vertex(4))
+
+  target = g.get_vertex(4)
+  path = [target.get_id()]
+  shortest(target, path)
+  print 'The shortest path : %s' %(path[::-1]) 
 

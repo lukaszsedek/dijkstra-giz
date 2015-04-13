@@ -65,6 +65,7 @@ Options:
 $ python dijkstra-giz/main.py -f tests/test.txt
 ```
 ```
+Struktura katalogów
 
 .
 ├── LICENSE
