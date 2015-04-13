@@ -43,6 +43,7 @@ Program ma czytać ze standardowego wejścia i wypisywać rozwiązanie
 na standardowe wyjście; n < 100000, m < 200000.
 
 ## Algorytm
+Wykorzystany został algorytm Dijkstry. Poniższy pseudokod zaczerpnięty z wikipedii:
 
 ```
 Dijkstra(G,w,s):
@@ -62,7 +63,7 @@ Dijkstra(G,w,s):
    Wyświetl("Droga wynosi: " + [v])
 ```
 ## Instalacja:
-
+Program wymaga zainstalowanego interptretera python wraz z biblioteką graphviz.
 ```
 $ git clone https://github.com/lukaszsedek/dijkstra-giz.git
 $ cd dijkstra-giz
@@ -73,7 +74,10 @@ $ pip install graphviz
 
 ## Instrukcja użytkownika:
 
-```
+Do uruchomienia programu wymagane są uprawdnienia administratora. Program korzysta z biblioteki graphviz, która jest wykorzystywana do
+utworzenia pliku graph.png. Jest to plik przedstawiający graficzną prezentację algorytmu
+
+```bash
 $ Usage: main.py [options]
 
 Options:
@@ -81,26 +85,42 @@ Options:
   -f FILE, --file=FILE  load initial topology from FILE
   -l LEVEL, --log=LEVEL
                         set logging level LOG, DEBUG
-$ python dijkstra-giz/main.py -f tests/test.txt
-```
-```
-Struktura katalogów
 
+$ sudo python dijkstra-giz/main.py -f tests/my.txt
+Password:
+9
+1 7 8 13 19 25
+$
+$ ls | grep graph
+Digraph.gv
+graph
+graph.pdf
+```
+Dodatkowo w katalogu tests znajdują się trzy pliki do weryfikacji poprawoności działania algorytmu
+
+### Struktura katalogów
+```
 .
 ├── LICENSE
 ├── README.md
-├── bin
 ├── dijkstra-giz
 │   ├── __init__.py
+│   ├── dijkstra.py
+│   ├── dijkstra.pyc
 │   ├── graph.py
 │   ├── graph.pyc
 │   ├── main.py
 │   ├── vertex.py
-│   └── vertex.pyc
+│   ├── vertex.pyc
+│   └── wiki.txt
 ├── docs
-├-─ setup.py
+├── setup.py
 └── tests
-    └── test.txt
+    ├── my.txt
+    ├── test.txt
+    └── wiki.txt
+```
 
-# License:
-jakas
+# Licencja:
+
+Apache Common 2.0
