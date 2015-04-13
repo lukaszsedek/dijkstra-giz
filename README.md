@@ -78,15 +78,14 @@ Do uruchomienia programu wymagane są uprawdnienia administratora. Program korzy
 utworzenia pliku graph.png. Jest to plik przedstawiający graficzną prezentację algorytmu
 
 ```bash
-$ Usage: main.py [options]
+Usage: main.py [options]
 
 Options:
   -h, --help            show this help message and exit
   -f FILE, --file=FILE  load initial topology from FILE
-  -l LEVEL, --log=LEVEL
-                        set logging level LOG, DEBUG
-
-$ sudo python dijkstra-giz/main.py -f tests/my.txt
+  -v, --verbose         Turn on talkative mode
+  
+$ sudo python dijkstra-giz/main.py --file=tests/wiki.txt
 Password:
 9
 1 7 8 13 19 25

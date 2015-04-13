@@ -16,35 +16,46 @@ from datetime import datetime
 filename         = ""
 edges_number     = 0
 
-# Dijkstra algorithm computing shortest path from start to target
+
+'''
+Dijkstra algorithm which comuputes shortest path between two vertices.
+Used python heapq implementation of priority heap
+'''
 def dijkstra(aGraph, start, target): 
   # Set the distance for the start node to zero 
-  start.set_distance(0) # Put tuple pair into the priority queue 
+  start.set_distance(0) 
+  # 2. All other vertices are infinity (done by default on vertex)
+  # Put all vertices in priority queue
   priority_queue = [(v.get_distance(),v) for v in aGraph] 
   heapq.heapify(priority_queue) 
 
+  # 3. While heap is not empty...
   while len(priority_queue): 
-    # Pops a vertex with the smallest distance 
+    # pop vertex with lowest metric from queue
     uv = heapq.heappop(priority_queue)
     current = uv[1] 
     current.set_visited() 
  
-    #for next in v.adjacent: 
+    # 4 For all edges in given vertex
     for next in current.adjacent:
-      # if visited, skip 
+       # ...just loop avoidance :)
       if next.visited: 
    	    continue
+   	  # update distance with calculated distance
       new_dist = current.get_distance() + current.get_weight(next)
-
+      # but if distance is lower than previous
+      # make it current distance. It's better metric
       if new_dist < next.get_distance():
       	next.set_distance(new_dist)
       	next.set_previous(current)
       	logging.debug("updated current: %s, next = %s, new_dist = %s",
       		current.get_id(), next.get_id(), next.get_distance())
       else:
+      	# But if it's not, just skip this point
         logging.debug("not updated current: %s, next: %s new_dist = %s ",
          current.get_id(), next.get_id(), next.get_distance())
 
+    # 5. last pop all from queue
     while len(priority_queue):
     	heapq.heappop(priority_queue)
     priority_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
@@ -58,7 +69,7 @@ def shortest(target, path):
     shortest(target.previous, path)
   return
 
-# Parsing 1st line of config-topologu file
+# Parsing 1st line of config-topology file
 # initialize both variables. In case of cast Error, exit
 def parse_first_line_config( line ):
   logging.debug("Splitted line: %s", splitted_line)
@@ -79,15 +90,15 @@ def parse_first_line_config( line ):
 def parse_edges(line):
   line_splited = line.split()
   logging.debug("Splitted line %s ", line_splited)
-  vertex_1 = 0
-  vertex_2 = 0
-  weight = 0
+  frm = 0
+  to = 0
+  cost = 0
   try:
-    vertex_1 = int(line_splited[0])
-    vertex_2 = int(line_splited[1])
-    weight   = int(line_splited[2])
-    logging.debug("Adding edge(%s, %s, %s)", vertex_1, vertex_2, weight)
-    g.add_edge(vertex_1, vertex_2, weight)
+    frm    = int(line_splited[0])
+    to     = int(line_splited[1])
+    cost   = int(line_splited[2])
+    logging.debug("Adding edge(%s, %s, %s)", frm, to, cost)
+    g.add_edge(frm, to, cost)
   except ValueError:
   	logging.error("CASE ERROR: COULD NOT PARSE LINE AS A NUMBER!!\n %s"
     	, line)
