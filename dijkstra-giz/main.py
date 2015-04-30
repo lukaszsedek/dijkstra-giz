@@ -72,14 +72,12 @@ def shortest(target, path):
 # Parsing 1st line of config-topology file
 # initialize both variables. In case of cast Error, exit
 def parse_first_line_config( line ):
-  logging.debug("Splitted line: %s", splitted_line)
   try:
     vertex_number = int(line[0])
     logging.info("Vertex number: %s", vertex_number)
     for i in range(1, vertex_number+1):
       g.add_vertex(i)
     edges_number  = int(line[1])
-    logging.info("Edge number: %s", edges_number)
   except ValueError:
     logging.error("CASE ERROR: COULD NOT PARSE 1ST LINE AS A NUMBER!!\n %s"
     	, line)
@@ -89,7 +87,6 @@ def parse_first_line_config( line ):
 # initialize 3 tuples. In case of cast Error, exit
 def parse_edges(line):
   line_splited = line.split()
-  logging.debug("Splitted line %s ", line_splited)
   frm = 0
   to = 0
   cost = 0
@@ -115,16 +112,10 @@ if __name__ == "__main__":
   
   (options, args) = parser.parse_args()
   
-  # logging utils section
-  if options.verbose:
-    logging.basicConfig(level="DEBUG", format='%(message)s')
 
   # filename loading section
-  logging.debug("checking filename argument")
   if options.filename:
-    logging.debug("options.filename exists: %s", options.filename)
     filename = options.filename
-    logging.debug("variable filename sucessfully initialized : %s ", filename)
   else:
     logging.error("Filename not found. Program is exiting")
     sys.exit(0)
@@ -137,14 +128,12 @@ if __name__ == "__main__":
   f = open(filename, 'r')
   line_numer = 0
   for line in f:
-    logging.debug("Line %s : %s", line_numer, line.rstrip('\n'))
     # first line parsing 
     if line_numer == 0:
       splitted_line = line.split()
       if len(splitted_line) == 2 :
         parse_first_line_config(splitted_line)
       elif len(splitted_line) < 2 :
-        logging.error("MISSING ARGUMENT IN 1ST LINE")
         sys.exit(0)
       else:
         logging.debug("config file 1st line has to much numbers")
@@ -157,19 +146,14 @@ if __name__ == "__main__":
   f.close()
   
   # printing how many vertices are loaded
-  logging.info("Vertices %s" , g.get_vertices()) 
   target = g.get_vertex(g.get_vertex_number()) # end of the graph
   # Calculating shortest path from 1 to the last vertex
   start_time = datetime.now()
   # Dijkstra algorithm
   dijkstra(g, g.get_vertex(1), target)
-  stop_time = datetime.now()
-  delta = stop_time - start_time
-  logging.debug("Execute time: %s seconds %s microseconds"
-  	, delta.seconds, delta.microseconds)
+  
   path = [target.get_id()]
   shortest(target, path) # sorting 
-  g.print_graph(path) # making graph.png file
   print target.get_distance() # OUTPUT
   path = path[::-1] # reverse it
   path_str = ''.join(str(e) + " " for e in path) # making output

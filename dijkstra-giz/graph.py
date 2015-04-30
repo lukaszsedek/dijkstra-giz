@@ -1,7 +1,5 @@
 
 from vertex import Vertex
-from graphviz import Digraph
-import logging
 '''
 Class which represents overall Graph
 Lukasz Sedek
@@ -56,30 +54,6 @@ class Graph:
   def get_vertex_number(self):
   	return len(self.vert_dict)
 
-  # print graphviz structure and save as graph.pdf
-  # additional feature
-  def print_graph(self, path_in):
-    dot = Digraph(comment='Dijkstra-GIZ')
-    dot.body.append(r'label = "\n\nDijkstra-GIZ\nLukasz Sedek"')
-    dot.body.append('fontsize=20')
-    dot.attr('node', shape='circle')
-    # iterate all vertices and its edges
-    for v in self:
-    	if v.get_id() in path_in:
-    		dot.node(str(v.get_id()), str(v.get_id()) + "(" + str(v.get_distance()) + ")", color="RED")
-    	else:
-    		dot.node(str(v.get_id()), str(v.get_id()) + "(" + str(v.get_distance()) + ")" )
-    	for w in v.get_connections():
-            vid = v.get_id()
-            wid = w.get_id()
-            if ((vid in path_in) and (wid in path_in) ):
-            	dot.edge(str(vid), str(wid), label=str(v.get_weight(w)), color="RED")
-            else:
-            	dot.edge(str(vid), str(wid), label=str(v.get_weight(w)))
-            logging.debug('( %s , %s, %3d)' % ( vid, wid, v.get_weight(w)))
-    dot.render('graph')
-    logging.debug(dot.source)
-    
 
     
     
